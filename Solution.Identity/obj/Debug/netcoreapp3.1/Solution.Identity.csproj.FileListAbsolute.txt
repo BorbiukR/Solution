@@ -1,0 +1,9 @@
+C:\Users\user\source\repos\Solution\Solution.Identity\bin\Debug\netcoreapp3.1\Solution.Identity.deps.json
+C:\Users\user\source\repos\Solution\Solution.Identity\bin\Debug\netcoreapp3.1\Solution.Identity.dll
+C:\Users\user\source\repos\Solution\Solution.Identity\bin\Debug\netcoreapp3.1\Solution.Identity.pdb
+C:\Users\user\source\repos\Solution\Solution.Identity\obj\Debug\netcoreapp3.1\Solution.Identity.csprojAssemblyReference.cache
+C:\Users\user\source\repos\Solution\Solution.Identity\obj\Debug\netcoreapp3.1\Solution.Identity.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\Solution\Solution.Identity\obj\Debug\netcoreapp3.1\Solution.Identity.AssemblyInfo.cs
+C:\Users\user\source\repos\Solution\Solution.Identity\obj\Debug\netcoreapp3.1\Solution.Identity.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\Solution\Solution.Identity\obj\Debug\netcoreapp3.1\Solution.Identity.dll
+C:\Users\user\source\repos\Solution\Solution.Identity\obj\Debug\netcoreapp3.1\Solution.Identity.pdb

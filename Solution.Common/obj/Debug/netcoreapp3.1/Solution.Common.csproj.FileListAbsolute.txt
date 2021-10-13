@@ -1,0 +1,8 @@
+C:\Users\user\source\repos\Solution\Solution.Common\bin\Debug\netcoreapp3.1\Solution.Common.deps.json
+C:\Users\user\source\repos\Solution\Solution.Common\bin\Debug\netcoreapp3.1\Solution.Common.dll
+C:\Users\user\source\repos\Solution\Solution.Common\bin\Debug\netcoreapp3.1\Solution.Common.pdb
+C:\Users\user\source\repos\Solution\Solution.Common\obj\Debug\netcoreapp3.1\Solution.Common.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\Solution\Solution.Common\obj\Debug\netcoreapp3.1\Solution.Common.AssemblyInfo.cs
+C:\Users\user\source\repos\Solution\Solution.Common\obj\Debug\netcoreapp3.1\Solution.Common.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\Solution\Solution.Common\obj\Debug\netcoreapp3.1\Solution.Common.dll
+C:\Users\user\source\repos\Solution\Solution.Common\obj\Debug\netcoreapp3.1\Solution.Common.pdb

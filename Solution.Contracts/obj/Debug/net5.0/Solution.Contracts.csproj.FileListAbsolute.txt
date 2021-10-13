@@ -1,0 +1,15 @@
+C:\Users\user\source\repos\Solution\Solution.Contracts\bin\Debug\net5.0\Solution.Contracts.deps.json
+C:\Users\user\source\repos\Solution\Solution.Contracts\bin\Debug\net5.0\Solution.Contracts.dll
+C:\Users\user\source\repos\Solution\Solution.Contracts\bin\Debug\net5.0\ref\Solution.Contracts.dll
+C:\Users\user\source\repos\Solution\Solution.Contracts\bin\Debug\net5.0\Solution.Contracts.pdb
+C:\Users\user\source\repos\Solution\Solution.Contracts\obj\Debug\net5.0\Solution.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\source\repos\Solution\Solution.Contracts\obj\Debug\net5.0\Solution.Contracts.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\Solution\Solution.Contracts\obj\Debug\net5.0\Solution.Contracts.AssemblyInfo.cs
+C:\Users\user\source\repos\Solution\Solution.Contracts\obj\Debug\net5.0\Solution.Contracts.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\Solution\Solution.Contracts\obj\Debug\net5.0\Solution.Contracts.dll
+C:\Users\user\source\repos\Solution\Solution.Contracts\obj\Debug\net5.0\ref\Solution.Contracts.dll
+C:\Users\user\source\repos\Solution\Solution.Contracts\obj\Debug\net5.0\Solution.Contracts.pdb
+C:\Users\user\source\repos\Solution\Solution.Contracts\obj\Debug\net5.0\Solution.Contracts.csprojAssemblyReference.cache
+C:\Users\user\source\repos\Solution\Solution.Contracts\bin\Debug\net5.0\Solution.Common.dll
+C:\Users\user\source\repos\Solution\Solution.Contracts\bin\Debug\net5.0\Solution.Common.pdb
+C:\Users\user\source\repos\Solution\Solution.Contracts\obj\Debug\net5.0\Solution.Contracts.csproj.CopyComplete

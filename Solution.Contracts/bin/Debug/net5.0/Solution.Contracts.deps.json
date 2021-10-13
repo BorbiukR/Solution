@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "Solution.Contracts/1.0.0": {
+        "dependencies": {
+          "Solution.Common": "1.0.0"
+        },
+        "runtime": {
+          "Solution.Contracts.dll": {}
+        }
+      },
+      "Solution.Common/1.0.0": {
+        "runtime": {
+          "Solution.Common.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Solution.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Solution.Common/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

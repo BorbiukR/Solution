@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Solution.WebAPI</name>
+    </assembly>
+    <members>
+        <member name="M:Solution.WebAPI.Controllers.TransactionController.ExportFile(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Export file and save to Database
+            </summary>
+            <param name="file"></param>
+            <response code="400">Unable to create a transaction due to validation error</response>
+            <response code="401">Unauthorized</response>
+        </member>
+        <member name="M:Solution.WebAPI.Controllers.TransactionController.GetAllByFilter(Solution.Contracts.Requests.Queries.GetAllDataQuery)">
+            <summary>
+            Get Transactions by Status filter
+            </summary>
+            <param name="query"></param>
+            <response code="400">Unable to create a transaction due to validation error</response>
+            <response code="401">Unauthorized</response>
+        </member>
+        <member name="M:Solution.WebAPI.Controllers.TransactionController.DeleteByIdAsync(System.Int32)">
+            <summary>
+            Delete By Transaction Id
+            </summary>
+            <param name="modelId"></param>
+            <response code="400">Unable to create a transaction due to validation error</response>
+            <response code="401">Unauthorized</response>
+        </member>
+        <member name="M:Solution.WebAPI.Controllers.TransactionController.UpdateStatusByIdAsync(System.Int32,Solution.DAL.Enum.Status)">
+            <summary>
+            Update Status By Transaction Id
+            </summary>
+            <param name="modelId"></param>
+            <param name="status"></param>
+            <response code="400">Unable to create a transaction due to validation error</response>
+            <response code="401">Unauthorized</response>
+        </member>
+        <member name="M:Solution.WebAPI.Controllers.TransactionController.FindTransactionByClientName(System.String)">
+            <summary>
+            Find Transaction By Client Name
+            </summary>
+            <param name="clientName"></param>
+            <response code="400">Unable to create a transaction due to validation error</response>
+            <response code="401">Unauthorized</response>
+        </member>
+        <member name="M:Solution.WebAPI.Controllers.TransactionController.DownloadAsync">
+            <summary>
+            Download all Transactions into csv file
+            </summary>
+            <response code="400">Unable to create a transaction due to validation error</response>
+            <response code="401">Unauthorized</response>
+        </member>
+        <member name="M:Solution.WebAPI.Controllers.UserController.RegisterAsync(Solution.Contracts.Requests.Authentication.UserRegistrationRequest)">
+            <summary>
+            Register new user
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Solution.WebAPI.Controllers.UserController.LoginAsync(Solution.Contracts.Requests.Authentication.UserLoginRequest)">
+            <summary>
+            Login to the system
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
