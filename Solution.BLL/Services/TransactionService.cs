@@ -15,6 +15,7 @@ using Solution.DAL.Entities;
 using System.Transactions;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Solution.BLL.DTOs;
 
 namespace Solution.BLL.Services
 {
@@ -29,72 +30,91 @@ namespace Solution.BLL.Services
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public async Task<bool> DeleteByIdAsync(int modelId)
+        public async Task<bool> DeleteByIdAsync(int transactionId)
         {
-            if (modelId < 0 || modelId > 100_000)
-                throw new TransactionException("No such Transaction");
+            // TODO: chech in DB if exist
+            if (transactionId < 0 || transactionId > 100_000)
+                throw new TransactionException("No Transaction with such Id");
 
-            var model = await _context.TransactionInfos.FindAsync(modelId);
+            var transaction = await _context.TransactionInfos.FindAsync(transactionId);
 
-            _context.TransactionInfos.Remove(model);
+            _context.TransactionInfos.Remove(transaction);
 
             return await _context.SaveChangesAsync() > 0;
         }
         
         public async Task<StringBuilder> DownloadAsync()
         {
-            var res = await _context.TransactionInfos.Select(x => x).ToListAsync();
+            var transactions = await _context.TransactionInfos.Select(x => x).ToListAsync();
 
             var builder = new StringBuilder();
 
             builder.AppendLine("Id,Status,Type,ClientName,Amount");
 
-            foreach (var item in res)
+            foreach (var transaction in transactions)
             {
-                builder.AppendLine($"{item.Id},{item.Status},{item.Type},{item.ClientName},{item.Amount}");
+                builder.AppendLine(
+                    $"{transaction.Id}," +
+                    $"{transaction.Status}," +
+                    $"{transaction.Type}," +
+                    $"{transaction.ClientName}," +
+                    $"{transaction.Amount}"
+                    );
             }
 
             return builder;
         }
 
-        public IEnumerable<TransactionInfoDTO> GetAllByFilter(GetAllByFilterDTO filter = null)
+        public async Task<IEnumerable<TransactionInfoDTO>> GetAllByFilter(
+            GetAllByFilterDTO filter = null, 
+            PaginationFilterDTO paginationFilter = null)
         {
             var queryable = _context.TransactionInfos.AsQueryable();
 
             queryable = AddFiltersOnQuery(filter, queryable);
 
-            var res = queryable.Select(x => x.ToDto()).ToList();
+            if (paginationFilter == null)
+            {
+                return await queryable.Select(x => x.ToDto()).ToListAsync();
+            }
 
-            return res;
+            var skip = (paginationFilter.PageNumber - 1) * paginationFilter.PageSize;
+
+            return await queryable.Select(x => x.ToDto())
+                          .Skip(skip)
+                          .Take(paginationFilter.PageSize)
+                          .ToListAsync();
         }
 
-        public IEnumerable<TransactionInfoDTO> FindTransactionByClientName(string clientName)
+        public async Task<IEnumerable<TransactionInfoDTO>> FindTransactionByClientName(string clientName)
         {
             if (string.IsNullOrEmpty(clientName))
                 throw new TransactionException("Client Name Is Null Or Empty");
 
-            var list = _context.TransactionInfos.Where(x => x.ClientName == clientName).ToList();
+            var transactions = await _context.TransactionInfos
+                .Where(x => x.ClientName == clientName)
+                .ToListAsync();
 
-            var maapedList = list.Select(x => x.ToDto());
+            var maapedTransactions = transactions.Select(x => x.ToDto());
 
-            return maapedList;
+            return maapedTransactions;
         }
 
-        public async Task<bool> UpdateStatusByIdAsync(int modelId, Status status)
+        public async Task<bool> UpdateStatusByIdAsync(int transactionId, Status status)
         {
-            if (modelId < 0 || modelId > 100_000)
+            if (transactionId < 0 || transactionId > 100_000)
                 throw new TransactionException("No such Transaction");
 
-            var model = await _context.TransactionInfos.FindAsync(modelId);
+            var transaction = await _context.TransactionInfos.FindAsync(transactionId);
 
-            model.Status = status;
+            transaction.Status = status;
 
-            _context.TransactionInfos.Update(model);
+            _context.TransactionInfos.Update(transaction);
 
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> UploadFileSaveToDataBaseAsync(IFormFile file)
+        public async Task<bool> UploadFileAndSaveToDataBaseAsync(IFormFile file)
         {
             if (file == null)
                 throw new TransactionException("Error");
@@ -107,21 +127,21 @@ namespace Solution.BLL.Services
                 await fileStream.FlushAsync();
             }
 
-            var list = GetTransactionInfoList(path);
+            var transactions = GetTransactionInfoList(path);
 
-            var mappedList = Mapping(list);
+            var mappedTransactions = Mapping(transactions);
 
-            var exsistingRecords = CheckIfExsistData(mappedList);
+            var exsistingRecords = CheckIfExsistData(mappedTransactions);
 
             _context.TransactionInfos.UpdateRange(exsistingRecords);
-            _context.TransactionInfos.AddRange(mappedList.Except(exsistingRecords));
+            _context.TransactionInfos.AddRange(mappedTransactions.Except(exsistingRecords));
 
             return await _context.SaveChangesAsync() > 0;
         }
 
         private List<TransactionInfoDTO> GetTransactionInfoList(string path)
         {
-            var list = new List<TransactionInfoDTO>();
+            var transactions = new List<TransactionInfoDTO>();
 
             using (var reader = new StreamReader(path))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
@@ -140,11 +160,11 @@ namespace Solution.BLL.Services
                         Amount = csv.GetField<string>("Amount"),
                     };
 
-                    list.Add(transactionInfoDTO);
+                    transactions.Add(transactionInfoDTO);
                 }
             }
 
-            return list;
+            return transactions;
         }
 
         private IEnumerable<TransactionInfo> Mapping(List<TransactionInfoDTO> list) =>

@@ -1,6 +1,5 @@
 ﻿using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Threading.Tasks;
 using Solution.BLL.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +9,10 @@ using Solution.DAL.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using Solution.WebAPI.Helpers;
+using Solution.Contracts.Responses.Pagination;
+using Solution.BLL.DTO;
+using System.Linq;
 
 namespace Solution.WebAPI.Controllers
 {
@@ -19,82 +22,99 @@ namespace Solution.WebAPI.Controllers
     public class TransactionController : ControllerBase
     {
         private readonly ITransactionService _transactionService;
+        private readonly IUriService _uriService;
 
-        public TransactionController(ITransactionService transactionService)
+        public TransactionController(
+            ITransactionService transactionService, 
+            IUriService uriService)
         {
             _transactionService = transactionService;
+            _uriService = uriService;
         }
 
         /// <summary>
-        /// Export file and save to Database
+        /// Upload file and save to Database
         /// </summary>
         /// <param name="file"></param>
         /// <response code="400">Unable to create a transaction due to validation error</response>
         /// <response code="401">Unauthorized</response>
         [Authorize(Roles = "Admin,User")]
         [HttpPost("upload")]
-        public async Task<IActionResult> ExportFile(IFormFile file)
+        public async Task<IActionResult> UploadFile(IFormFile file)
         {
             if (file == null)
                 return NotFound();
 
-            var res = await _transactionService.UploadFileSaveToDataBaseAsync(file);
+            var result = await _transactionService.UploadFileAndSaveToDataBaseAsync(file);
 
-            return Ok($"Status of uploading: {res}");
+            return Ok($"Status of uploading: {result}");
         }
 
         /// <summary>
         /// Get Transactions by Status filter
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="paginationQuery"></param>
         /// <response code="400">Unable to create a transaction due to validation error</response>
         /// <response code="401">Unauthorized</response>
         [Authorize(Roles = "Admin,User")]
         [HttpGet("filter")]
-        public IActionResult GetAllByFilter([FromQuery] GetAllDataQuery query)
+        public async Task<IActionResult> GetAllByFilter(
+            [FromQuery] GetAllDataQuery query, 
+            [FromQuery] PaginationQuery paginationQuery)
         {
             var filter = query.DomainToRequestFilter();
+            var pagination = paginationQuery.DomainToRequest();
+            var transactions = await _transactionService.GetAllByFilter(filter, pagination);
 
-            var res = _transactionService.GetAllByFilter(filter).ToList();
+            var cardFilesPaginationResponse = new PagedResponse<TransactionInfoDTO>(transactions);
 
-            return Ok(res);
+            if (transactions == null || cardFilesPaginationResponse == null)
+                return NotFound();
+
+            if (pagination == null || pagination.PageNumber < 1 || pagination.PageSize < 1)
+                return Ok(cardFilesPaginationResponse);
+
+            var paginationResponse = PaginationHelpers.CreatePaginatedResponse(_uriService, pagination, transactions.ToList());
+
+            return Ok(paginationResponse);
         }
 
         /// <summary>
         /// Delete By Transaction Id
         /// </summary>
-        /// <param name="modelId"></param>
+        /// <param name="transactionId"></param>
         /// <response code="400">Unable to create a transaction due to validation error</response>
         /// <response code="401">Unauthorized</response>
         [Authorize(Roles = "Admin,User")]
         [HttpDelete("records/{modelId}")]
-        public async Task<IActionResult> DeleteByIdAsync(int modelId)
+        public async Task<IActionResult> DeleteByIdAsync(int transactionId)
         {
-            if (modelId < 0 || modelId > 100_000)
+            if (transactionId < 0 || transactionId > 100_000)
                 return NotFound();
 
-            var res = await _transactionService.DeleteByIdAsync(modelId);
+            var result = await _transactionService.DeleteByIdAsync(transactionId);
 
-            return Ok($"Status of deleting: {res}");
+            return Ok($"Status of deleting: {result}");
         }
 
         /// <summary>
         /// Update Status By Transaction Id
         /// </summary>
-        /// <param name="modelId"></param>
+        /// <param name="transactionId"></param>
         /// <param name="status"></param>
         /// <response code="400">Unable to create a transaction due to validation error</response>
         /// <response code="401">Unauthorized</response>
         [Authorize(Roles = "Admin,User")]
         [HttpPut("records/{modelId}")]
-        public async Task<IActionResult> UpdateStatusByIdAsync(int modelId, Status status)
+        public async Task<IActionResult> UpdateStatusByIdAsync(int transactionId, Status status)
         {
-            if (modelId < 0 || modelId > 100_000)
+            if (transactionId < 0 || transactionId > 100_000)
                 return NotFound();
 
-            var res = await _transactionService.UpdateStatusByIdAsync(modelId, status);
+            var result = await _transactionService.UpdateStatusByIdAsync(transactionId, status);
 
-            return Ok($"Status of updaining: {res}");
+            return Ok($"Status of updaining: {result}");
         }
 
         /// <summary>
@@ -105,11 +125,11 @@ namespace Solution.WebAPI.Controllers
         /// <response code="401">Unauthorized</response>
         [Authorize(Roles = "Admin,User")]
         [HttpGet("records/{clientName}")]
-        public IActionResult FindTransactionByClientName(string clientName)
+        public async Task<IActionResult> FindTransactionByClientName(string clientName)
         {
-            var res = _transactionService.FindTransactionByClientName(clientName).ToList();
+            var transactions = await _transactionService.FindTransactionByClientName(clientName);
 
-            return Ok(res);
+            return Ok(transactions);
         }
 
         /// <summary>
@@ -121,9 +141,9 @@ namespace Solution.WebAPI.Controllers
         [HttpGet("download")]
         public async Task<IActionResult> DownloadAsync()
         {
-            var res = await _transactionService.DownloadAsync();
+            var result = await _transactionService.DownloadAsync();
 
-            return File(Encoding.UTF8.GetBytes(res.ToString()), "text/csv", "TransactionInfos.csv");
+            return File(Encoding.UTF8.GetBytes(result.ToString()), "text/csv", "TransactionInfos.csv");
         }       
     }
 }

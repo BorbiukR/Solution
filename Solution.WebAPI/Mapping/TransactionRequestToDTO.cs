@@ -3,7 +3,7 @@ using Solution.Contracts.Requests.Queries;
 
 namespace Solution.WebAPI.Mapping
 {
-    public static class DTOToRequest
+    public static class TransactionRequestToDTO
     {
         public static GetAllByFilterDTO DomainToRequestFilter(this GetAllDataQuery transaction)
         {

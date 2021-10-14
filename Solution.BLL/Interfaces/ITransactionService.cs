@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Solution.BLL.DTO;
+using Solution.BLL.DTOs;
 using Solution.DAL.Enum;
 using System.Collections.Generic;
 using System.Text;
@@ -9,13 +10,15 @@ namespace Solution.BLL.Interfaces
 {
     public interface ITransactionService : ICrud<TransactionInfoDTO>
     {
-        Task<bool> UpdateStatusByIdAsync(int modelId, Status status);
+        Task<bool> UpdateStatusByIdAsync(int transactionId, Status status);
 
-        IEnumerable<TransactionInfoDTO> FindTransactionByClientName(string clientName);
+        Task<IEnumerable<TransactionInfoDTO>> FindTransactionByClientName(string clientName);
 
-        Task<bool> UploadFileSaveToDataBaseAsync(IFormFile file); 
+        Task<bool> UploadFileAndSaveToDataBaseAsync(IFormFile file);
 
-        IEnumerable<TransactionInfoDTO> GetAllByFilter(GetAllByFilterDTO filter = null); 
+        Task<IEnumerable<TransactionInfoDTO>> GetAllByFilter(
+            GetAllByFilterDTO filter = null, 
+            PaginationFilterDTO paginationFilter = null); 
 
         Task<StringBuilder> DownloadAsync();      
     }

@@ -4,19 +4,20 @@
         <name>Solution.WebAPI</name>
     </assembly>
     <members>
-        <member name="M:Solution.WebAPI.Controllers.TransactionController.ExportFile(Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:Solution.WebAPI.Controllers.TransactionController.UploadFile(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
-            Export file and save to Database
+            Upload file and save to Database
             </summary>
             <param name="file"></param>
             <response code="400">Unable to create a transaction due to validation error</response>
             <response code="401">Unauthorized</response>
         </member>
-        <member name="M:Solution.WebAPI.Controllers.TransactionController.GetAllByFilter(Solution.Contracts.Requests.Queries.GetAllDataQuery)">
+        <member name="M:Solution.WebAPI.Controllers.TransactionController.GetAllByFilter(Solution.Contracts.Requests.Queries.GetAllDataQuery,Solution.Contracts.Requests.Queries.PaginationQuery)">
             <summary>
             Get Transactions by Status filter
             </summary>
             <param name="query"></param>
+            <param name="paginationQuery"></param>
             <response code="400">Unable to create a transaction due to validation error</response>
             <response code="401">Unauthorized</response>
         </member>
@@ -24,7 +25,7 @@
             <summary>
             Delete By Transaction Id
             </summary>
-            <param name="modelId"></param>
+            <param name="transactionId"></param>
             <response code="400">Unable to create a transaction due to validation error</response>
             <response code="401">Unauthorized</response>
         </member>
@@ -32,7 +33,7 @@
             <summary>
             Update Status By Transaction Id
             </summary>
-            <param name="modelId"></param>
+            <param name="transactionId"></param>
             <param name="status"></param>
             <response code="400">Unable to create a transaction due to validation error</response>
             <response code="401">Unauthorized</response>
